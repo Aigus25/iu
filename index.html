@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>เป็นแฟนกับเค้าน้าเธออ ❤️</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(135deg, #f893b5, #ffbdcb, #ffd8d9);
+        font-family: "Prompt", sans-serif;
+        margin: 0;
+        overflow: hidden;
+      }
+
+      .card {
+        background: white;
+        width: 90%;
+        max-width: 400px;
+        border-radius: 30px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        padding: 20px;
+        position: relative;
+      }
+
+      h2 {
+        margin-bottom: 15px;
+      }
+
+      .gif-container img {
+        width: 100%;
+        border-radius: 20px;
+        transition: transform 0.3s ease;
+      }
+
+      .buttons {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        position: relative;
+      }
+
+      button {
+        padding: 12px 30px;
+        font-size: 1rem;
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        min-width: 80px;
+      }
+
+      #yesBtn {
+        background-color: #4caf50;
+        color: white;
+      }
+      #noBtn {
+        background-color: #f44336;
+        color: white;
+      }
+
+      .love-container {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .love-container img {
+        width: 80%;
+        max-width: 250px;
+        border-radius: 20px;
+        margin-top: 10px;
+      }
+
+      .love-container p {
+        font-size: 1.3rem;
+        color: #e91e63;
+        font-weight: bold;
+        margin: 5px 0 0 0;
+        line-height: 1.4;
+      }
+
+      .gif-bounce {
+        transform: scale(1.05) rotate(-2deg);
+      }
+
+      .highlight {
+        animation: pulse 0.6s ease-in-out;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+          color: #e91e63;
+        }
+        50% {
+          transform: scale(1.1);
+          color: #ff4081;
+        }
+        100% {
+          transform: scale(1);
+          color: #e91e63;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card" id="card">
+      <h2 id="questionText">เป็นแฟนกับเค้าน้าเธออ ❤️</h2>
+      <div class="gif-container" id="gifContainer">
+        <img
+          src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzU2a3lkbzZ6ZXhudXYxZHRwdzRhdXVyN3p4djZubjVudHN4aG5hayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9JrzoNmLodn9IWzLOC/giphy.gif"
+          alt="Cat Dance"
+        />
+      </div>
+      <div class="buttons" id="buttons">
+        <button id="yesBtn">ตกลง ❤️</button>
+        <button id="noBtn">ไม่ 😢</button>
+      </div>
+      <div class="love-container" id="loveContainer">
+        <p>เย่ๆๆ เธอตกลงแล้วน้าาคนสวยย ❤️</p>
+        <img
+          src="https://media.tenor.com/Vx9xmB8bZJcAAAAi/i-love-you-love.gif"
+          alt="I Love You"
+        />
+      </div>
+
+      <!-- เพลงพื้นหลัง -->
+      <audio id="bgMusic" src="./LIPTA _ แฟน [Official Audio].mp3" loop></audio>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+      const yesBtn = document.getElementById("yesBtn");
+      const noBtn = document.getElementById("noBtn");
+      const loveContainer = document.getElementById("loveContainer");
+      const questionText = document.getElementById("questionText");
+      const gifContainer = document.getElementById("gifContainer");
+      const buttonsDiv = document.getElementById("buttons");
+      const music = document.getElementById("bgMusic");
+
+      let yesSize = 1;
+      let noSize = 1;
+      let noCount = 0;
+
+      const messages = [
+        "แน่ใจหรอเธออ 🤨",
+        "เค้าถามจริงงงง 🥺",
+        "เค้าให้คิดอีกรอบบ 😢",
+        "คิดดีแล้วหรออ 😳",
+        "อย่าใจร้ายเลยคนสวยย 💔",
+        "เธอออออออออออ 😭",
+        "ไม่ลองคิดดูก่อนหรออ 😾",
+        "ถ้ากดไม่อีก เค้าจะร้องไห้แล้วน้าา 😭",
+      ];
+
+      // เล่นเพลงตั้งแต่โหลดเว็บ + ตั้งเสียง 0.1 = 10%
+      window.addEventListener("load", () => {
+        music.volume = 0.05; // ปรับระดับเสียง
+        music.play().catch(() => {
+          console.log("Browser ป้องกัน autoplay ต้องกดปุ่มก่อน");
+        });
+      });
+
+      yesBtn.addEventListener("click", () => {
+        music.play(); // เรียกซ้ำเผื่อ browser บล็อก autoplay
+        questionText.style.display = "none";
+        gifContainer.style.display = "none";
+        buttonsDiv.style.display = "none";
+        loveContainer.style.display = "flex";
+
+        for (let i = 0; i < 5; i++) {
+          setTimeout(() => {
+            confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+          }, i * 500);
+        }
+      });
+
+      noBtn.addEventListener("click", () => {
+        noCount++;
+
+        questionText.classList.remove("highlight");
+        if (noCount <= 8) {
+          questionText.innerText = messages[noCount - 1];
+        } else if (noCount === 9) {
+          questionText.innerText = "เค้าให้เธอคิดรอบบสุดท้ายยย 😚";
+          questionText.classList.add("highlight");
+          music.play();
+        } else if (noCount >= 10) {
+          questionText.innerText = "ยังไงเธอก็ต้องเป็นนน😝";
+          questionText.classList.add("highlight");
+          noBtn.style.display = "none";
+          music.play();
+        }
+
+        noSize -= 0.2;
+        if (noSize < 0.3) noSize = 0.3;
+        noBtn.style.fontSize = noSize + "rem";
+        noBtn.style.padding = 12 * noSize + "px " + 25 * noSize + "px";
+
+        const maxX = buttonsDiv.clientWidth - noBtn.offsetWidth;
+        const maxY = buttonsDiv.clientHeight - noBtn.offsetHeight;
+        noBtn.style.position = "absolute";
+        noBtn.style.left = Math.random() * maxX + "px";
+        noBtn.style.top = Math.random() * maxY + "px";
+
+        yesSize += 0.2;
+        if (yesSize > 2.6) {
+          yesSize = 2.6;
+          yesBtn.innerText = "นี่คือการบังคับ 💖";
+        }
+        yesBtn.style.fontSize = yesSize + "rem";
+        yesBtn.style.padding = 12 * yesSize + "px " + 25 * yesSize + "px";
+
+        const gif = document.querySelector(".gif-container img");
+        gif.classList.add("gif-bounce");
+        setTimeout(() => gif.classList.remove("gif-bounce"), 300);
+      });
+    </script>
+  </body>
+</html>
